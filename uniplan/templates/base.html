@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <title>data-entry | {% block title %}{% endblock %}</title>
+</head>
+<body>
+<div class="dashboard-container">
+    <nav class="navigation">
+        <h1><a href='{{url_for('index')}}'><i class="fa-solid fa-dashboard"></i> Uni<strong>plan</strong></a></h1>
+        <ul>
+            <li><a href ='{{url_for('index')}}'>home</a></li>
+            <li><a href ='{{url_for('manage_programs')}}'>program management</a></li>
+            <li><a href ='{{url_for('manage_sub')}}'>course management</a></li>
+        </ul>
+    </nav>
+    <main class="content-area">
+    {%block content%}
+
+        {%endblock%}
+    </main>
+    <!--    <div class="flash-messages">-->
+    <!--      {% with messages = get_flashed_messages(with_categories=true) %}-->
+    <!--          {% if messages %}-->
+    <!--              {% for category, message in messages %}-->
+    <!--                  <div class="flash-message flash-{{ category }}">-->
+    <!--                      <span class="flash-message-text">{{ message }}</span>-->
+    <!--                      <span class="flash-close" onclick="this.parentElement.style.display='none';">&times;</span>-->
+    <!--                  </div>-->
+    <!--              {% endfor %}-->
+    <!--          {% endif %}-->
+    <!--      {% endwith %}-->
+    <!--    </div>-->
+</div>
+
+<script>
+    const flashCloseButtons = document.querySelectorAll('.flash-close');
+    flashCloseButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        button.parentElement.style.display = 'none';
+      });
+    });
+</script>
+</body>
+</html>

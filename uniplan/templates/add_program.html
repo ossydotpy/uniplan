@@ -1,0 +1,36 @@
+{%extends 'base.html'%}
+
+{%block content%}
+
+<h2>Program Entry Form</h2>
+<form action="/add_program" method="post">
+    {{ form.hidden_tag() }}
+    <label for="program_name">Program Name:</label><br>
+    {{ form.program_name(class="form-control") }}<br><br>
+    {% if form.program_name.errors %}
+        <ul class="errors">
+        {% for error in form.program_name.errors %}
+            <li>{{ error }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+
+    <label for="field">Field:</label><br>
+    {{ form.field(class="form-control") }}<br><br>
+
+    <label for="department">Department:</label><br>
+    {{ form.department(class="form-control") }}<br><br>
+
+    <label for="university">University:</label><br>
+    {{ form.university(class="form-control") }}<br><br>
+
+    <label for="description">Description:</label><br>
+    {{ form.description(class="form-control") }}<br><br>
+
+    <label for="tuition_fees">Tuition Fees:</label><br>
+    {{ form.tuition_fees(class="form-control") }}<br><br>
+    <input type="submit" value="Add program" class="btn btn-primary">
+</form>
+
+
+{%endblock%}
