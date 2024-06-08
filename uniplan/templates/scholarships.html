@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<ul><a href="#"><li>import excel data</li></a></ul>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Add Scholarship</h2>
+            <form method="post" action="{{ url_for('scholarships') }}">
+                {{ form.hidden_tag() }}
+
+                <div class="form-group">
+                    <label for="scholarship_name">Scholarship Name:</label>
+                    {{ form.scholarship_name(class="form-control") }}
+                    {% for error in form.scholarship_name.errors %}
+                    <small class="form-text text-danger">{{ error }}</small>
+                    {% endfor %}
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description:</label>
+                    {{ form.description(class="form-control") }}
+                    {% for error in form.description.errors %}
+                    <small class="form-text text-danger">{{ error }}</small>
+                    {% endfor %}
+                </div>
+
+                <div class="form-group">
+                    <label for="amount">Amount:</label>
+                    {{ form.amount(class="form-control") }}
+                    {% for error in form.amount.errors %}
+                    <small class="form-text text-danger">{{ error }}</small>
+                    {% endfor %}
+                </div>
+
+                <div class="form-group">
+                    <label for="eligibility">Eligibility:</label>
+                    {{ form.eligibility(class="form-control") }}
+                    {% for error in form.eligibility.errors %}
+                    <small class="form-text text-danger">{{ error }}</small>
+                    {% endfor %}
+                </div>
+
+                <div class="form-group">
+                    <label for="website">Website:</label>
+                    {{ form.website(class="form-control") }}
+                    {% for error in form.website.errors %}
+                    <small class="form-text text-danger">{{ error }}</small>
+                    {% endfor %}
+                </div>
+
+                <button type="submit" class="btn btn-primary">Add Scholarship</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <h2>Scholarships</h2>
+        {%if scholarships %}
+        <table>
+            <thead>
+            <tr>
+                <th>Scholarship</th>
+                <th>Description</th>
+                <th>Eligibility</th>
+                <th>Amount</th>
+                <th>website</th>
+            </tr>
+            </thead>
+            <tbody>
+            {%for scholarship in scholarships%}
+            <tr>
+                <td>{{scholarship.scholarship_name}}</td>
+                <td>{{scholarship.description}}</td>
+                <td>{{scholarship.eligibility}}</td>
+                <td>{{scholarship.amount}}</td>
+                <td>{{scholarship.website}}</td>
+            </tr>
+            {%endfor%}
+            {%else%}
+            <p>no scholarships here</p>
+            {%endif%}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

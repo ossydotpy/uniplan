@@ -10,3 +10,30 @@ th, td {
 th {
 
 }
+.navigation {
+    list-style: none;
+    padding: 0;
+}
+
+.navigation h1 a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.navigation ul {
+    column-count: 2;
+}
+
+.navigation ul li {
+    margin-bottom: 10px;
+}
+
+.navigation ul li a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.navigation ul li a:hover {
+    text-decoration: underline;
+}

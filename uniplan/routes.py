@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for
 from uniplan import app, db
-from uniplan.models import Program, Subject, ProgramSubject
-from uniplan.forms import ProgramForm, SubjectForm, ProgramSubjectForm
+from uniplan.models import Program, Subject, ProgramSubject, Scholarship, ProgramScholarship
+from uniplan.forms import ProgramForm, SubjectForm, ProgramSubjectForm, ScholarshipForm, ProgramScholarshipForm
 
 
 @app.route('/', methods=['GET'])
@@ -45,6 +45,41 @@ def manage_sub():
         db.session.commit()
         return redirect(url_for('manage_sub'))
     return render_template('manage_sub.html', form=form, subjects=subjects)
+
+
+@app.route('/scholarships', methods=['GET', 'POST'])
+def scholarships():
+    scholarship_list = Scholarship.query.all()
+    form = ScholarshipForm()
+    if form.validate_on_submit():
+        scholarship_name = form.scholarship_name.data
+        description = form.description.data
+        amount = form.amount.data
+        eligibility = form.eligibility.data
+        website = form.website.data
+        new_scholarship = Scholarship(scholarship_name=scholarship_name, description=description,
+                                      amount=amount, eligibility=eligibility, website=website)
+        db.session.add(new_scholarship)
+        db.session.commit()
+        return redirect(url_for('scholarships'))
+    return render_template('scholarships.html', form=form, scholarships=scholarship_list)
+
+
+@app.route('/prog_scholar', methods=['GET', 'POST'])
+def prog_scholar():
+    programs = Program.query.all()
+    prog_scho = ProgramScholarship.query.all()
+    form = ProgramScholarshipForm()
+    if form.validate_on_submit():
+        program_id = form.program_id.data
+        scholarship_id = form.scholarship_id.data
+
+        new_prog_scho = ProgramScholarship(program_id=program_id, scholarship_id=scholarship_id)
+        db.session.add(new_prog_scho)
+        db.session.commit()
+        return redirect(url_for('prog_scholar'))
+
+    return render_template('prog_scho.html', form=form, prog_scho=prog_scho, programs=programs)
 
 
 @app.route('/prog_sub', methods=['GET', 'POST'])

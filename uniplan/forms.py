@@ -48,7 +48,17 @@ class ProgramScholarshipForm(FlaskForm):
     program_id = IntegerField('Program ID', validators=[DataRequired()])
     scholarship_id = IntegerField('Scholarship ID', validators=[DataRequired()])
 
+    def validate_program_id(self, field):
+        program = Program.query.get(field.data)
+        if program is None:
+            raise ValidationError('Invalid Program ID')
+
 
 class ProgramCareerForm(FlaskForm):
     program_id = IntegerField('Program ID', validators=[DataRequired()])
     career = StringField('Career', validators=[DataRequired()])
+
+    def validate_program_id(self, field):
+        program = Program.query.get(field.data)
+        if program is None:
+            raise ValidationError('Invalid Program ID')
