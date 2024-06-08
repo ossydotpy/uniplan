@@ -2,9 +2,19 @@ import csv
 from functools import wraps
 
 from flask import render_template, redirect, url_for, request, flash
+
 from uniplan import app, db
-from uniplan.models import Program, Subject, ProgramSubject, Scholarship, ProgramScholarship
 from uniplan.forms import ProgramForm, SubjectForm, ProgramSubjectForm, ScholarshipForm, ProgramScholarshipForm
+from uniplan.models import Program, Subject, ProgramSubject, Scholarship, ProgramScholarship
+
+
+@app.context_processor
+def base_vars():
+    return {
+        'prog_count': Program.query.count(),
+        'sub_count': Subject.query.count(),
+        'scho_count': Scholarship.query.count()
+    }
 
 
 @app.route('/', methods=['GET'])
@@ -150,14 +160,17 @@ def handle_csv_upload():
 
             csv_content = extract_csv_content(file)
             return f(csv_content, *args, **kwargs)
+
         return decorated_function
+
     return decorator
 
 
 @app.route('/add_prog_excel', methods=['GET', 'POST'])
 @handle_csv_upload()
 def add_prog_excel(csv_content):
-    expected_columns = ['program_id', 'program_name', 'field', 'department', 'university', 'description', 'tuition_fees']
+    expected_columns = ['program_id', 'program_name', 'field', 'department', 'university', 'description',
+                        'tuition_fees']
     header, rows = csv_content
 
     if header == expected_columns:
@@ -173,3 +186,81 @@ def add_prog_excel(csv_content):
     else:
         flash('column mismatch')
     return redirect(url_for('manage_programs'))
+
+
+@app.route('/add_bulk_subjects', methods=['GET', 'POST'])
+@handle_csv_upload()
+def add_bulk_subjects(csv_content):
+    expected_columns = ['subject_id', 'subject_name']
+    header, rows = csv_content
+
+    if header == expected_columns:
+        for subject in rows:
+            new_subject = Subject(subject_name=subject[1])
+            db.session.add(new_subject)
+        db.session.commit()
+    else:
+        flash('column mismatch')
+    return redirect(url_for('manage_sub'))
+
+
+@app.route('/add_bulk_scholarships', methods=['GET', 'POST'])
+@handle_csv_upload()
+def add_bulk_scholarships(csv_content):
+    expected_columns = ['scholarship_id', 'scholarship_name',
+                        'description', 'amount', 'eligibility', 'website']
+    header, rows = csv_content
+
+    if header == expected_columns:
+        for row in rows:
+            new_scholarship = Scholarship(scholarship_name=row[1],
+                                      description=row[2],
+                                      amount=row[3],
+                                      eligibility=row[4],
+                                      website=row[5])
+            db.session.add(new_scholarship)
+        db.session.commit()
+    else:
+        flash('column mismatch')
+    return redirect(url_for('scholarships'))
+
+
+@app.route('/add_bulk_prog_scho', methods=['GET', 'POST'])
+@handle_csv_upload()
+def add_bulk_prog_scho(csv_content):
+    expected_columns = ['program_id', 'scholarship_id', 'scholarship_description']
+    header, rows = csv_content
+    count = len(rows)
+    if header == expected_columns:
+        for row in rows:
+            new_map = ProgramScholarship(program_id=row[0],
+                                         scholarship_id=row[1],
+                                         scholarship_description=row[2])
+            db.session.add(new_map)
+        db.session.commit()
+        flash('successfully added %s mappings', (str(count)))
+    else:
+        flash('column mismatch')
+    return redirect(url_for('manage_scho'))
+
+
+@app.route('/add_bulk_prog_sub', methods=['GET', 'POST'])
+@handle_csv_upload()
+def add_bulk_prog_sub(csv_content):
+    expected_columns = ['program_id', 'subject_id', 'cutoff', 'is_compulsory', 'is_elective']
+    header, rows = csv_content
+    count = len(rows)
+    if header == expected_columns:
+        for row in rows:
+            new_map = ProgramSubject(program_id=row[0],
+                                     subject_id=row[1],
+                                     cutoff=row[2],
+                                     is_compulsory=row[3],
+                                     is_elective=row[4])
+            db.session.add(new_map)
+
+        db.session.commit()
+        flash('successfully added %s mappings', (str(count)))
+    else:
+        flash('column mismatch')
+    return redirect(url_for('bulk_add'))

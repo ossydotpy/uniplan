@@ -15,9 +15,9 @@
         <div class="menu-toggle"><i class="fas fa-bars"></i></div>
         <ul>
             <li><a href ='{{url_for('index')}}'>home</a></li>
-            <li><a href ='{{url_for('manage_programs')}}'>program management</a></li>
-            <li><a href ='{{url_for('manage_sub')}}'>subject management</a></li>
-            <li><a href ='{{url_for('scholarships')}}'>scholarship management</a></li>
+            <li><a href ='{{url_for('manage_programs')}}'>programs ({{prog_count}})</a></li>
+            <li><a href ='{{url_for('manage_sub')}}'>subjects ({{sub_count}})</a></li>
+            <li><a href ='{{url_for('scholarships')}}'>scholarships ({{scho_count}})</a></li>
             <li><a href ='{{url_for('manage_prog_sub')}}'>program subject map</a></li>
             <li><a href ='{{url_for('prog_scholar')}}'>program scholarship map</a></li>
             <li><a href ='{{url_for('bulk_add')}}'>bulk import</a></li>

@@ -12,7 +12,7 @@
 
     <div id="update_subjects" class="update_card">
         <h2>Bulk Import Subjects</h2>
-        <form id="subjectsImportForm" action="" method="post" enctype="multipart/form-data">
+        <form id="subjectsImportForm" action="/add_bulk_subjects" method="post" enctype="multipart/form-data">
             <input type="file"  name="file" accept=".csv" required>
             <button type="reset" >reset</button>
             <button type="submit">Submit</button>
@@ -21,11 +21,31 @@
 
     <div id="update_scholarships" class="update_card">
         <h2>Bulk Import Scholarships</h2>
-        <form id="scholarshipsImportForm" action="" method="post" enctype="multipart/form-data">
+        <form id="scholarshipsImportForm" action="/add_bulk_scholarships" method="post" enctype="multipart/form-data">
             <input type="file"  name="file" accept=".csv" required>
             <button type="reset">reset</button>
             <button type="submit">Submit</button>
         </form>
     </div>
+
+    <div id="update_prog_scho" class="update_card">
+        <h2>Bulk Import Progam Scholarship Mapping</h2>
+        <form id="progScholarshipMapImportForm" action="/add_bulk_prog_scho" method="post" enctype="multipart/form-data">
+            <input type="file"  name="file" accept=".csv" required>
+            <button type="reset">reset</button>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <div id="update_prog_sub" class="update_card">
+        <h2>Bulk Import Program Subject Mapping</h2>
+        <form id="programSubjectImportForm" action="/add_bulk_prog_sub" method="post" enctype="multipart/form-data">
+            <input type="file"  name="file" accept=".csv" required>
+            <button type="reset">reset</button>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+
 </div>
 {%endblock%}
