@@ -47,18 +47,25 @@ def manage_sub():
     return render_template('manage_sub.html', form=form, subjects=subjects)
 
 
-@app.route('/manage_sub', methods=['GET', 'POST'])
+@app.route('/prog_sub', methods=['GET', 'POST'])
 def manage_prog_sub():
+    programs = Program.query.all()
     prog_subs = ProgramSubject.query.all()
     form = ProgramSubjectForm()
     if form.validate_on_submit():
         program_id = form.program_id.data
         subject_id = form.subject_id.data
-        new_prog_sub = ProgramSubject(program_id=program_id, subject_id=subject_id)
+        cutoff = form.cutoff.data
+        is_compulsory = form.is_compulsory.data
+        is_elective = form.is_elective.data
+
+        new_prog_sub = ProgramSubject(program_id=program_id, subject_id=subject_id, cutoff=cutoff,
+                                      is_compulsory=is_compulsory, is_elective=is_elective)
         db.session.add(new_prog_sub)
         db.session.commit()
-        return redirect(url_for('manage_sub'))
-    return render_template('prog_sub.html', form=form, prog_subs=prog_subs)
+        return redirect(url_for('manage_prog_sub'))
+
+    return render_template('prog_sub.html', form=form, prog_subs=prog_subs, programs=programs)
 
 
 @app.route('/delete_sub/<int:subject_id>', methods=['POST'])
@@ -76,3 +83,9 @@ def delete_program(program_id):
     db.session.commit()
     return redirect(url_for('manage_programs'))
 
+# @app.route('/delete_prog/<int:program_id>', methods=['POST'])
+# def delete_program(program_id):
+#     program = ProgramSubject.query.get_or_404(program_id)
+#     db.session.delete(program)
+#     db.session.commit()
+#     return redirect(url_for('manage_programs'))

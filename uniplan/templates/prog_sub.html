@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Add Program Subject</h2>
+    <form method="post" action="{{ url_for('manage_prog_sub') }}">
+        {{ form.hidden_tag() }}
+
+        <div class="form-group">
+            <label for="program_id">Program ID:</label>
+            {{ form.program_id(class="form-control") }}
+            {% for error in form.program_id.errors %}
+                <small class="form-text text-danger">{{ error }}</small>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            <label for="subject_id">Subject ID:</label>
+            {{ form.subject_id(class="form-control") }}
+            {% for error in form.subject_id.errors %}
+                <small class="form-text text-danger">{{ error }}</small>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            <label for="cutoff">Cutoff:</label>
+            {{ form.cutoff(class="form-control") }}
+            {% for error in form.cutoff.errors %}
+                <small class="form-text text-danger">{{ error }}</small>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            <label for="is_compulsory">Is Compulsory:</label>
+            {{ form.is_compulsory(class="form-control") }}
+            {% for error in form.is_compulsory.errors %}
+                <small class="form-text text-danger">{{ error }}</small>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            <label for="is_elective">Is Elective:</label>
+            {{ form.is_elective(class="form-control") }}
+            {% for error in form.is_elective.errors %}
+                <small class="form-text text-danger">{{ error }}</small>
+            {% endfor %}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Add Program Subject</button>
+    </form>
+</div>
+
+<h2>Program Subjects</h2>
+    {% for program in programs %}
+    <h3>{{ program.program_name }}</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Subject</th>
+                <th>Cutoff</th>
+                <th>Is Compulsory</th>
+                <th>Is Elective</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for program_subject in program.program_subjects %}
+            <tr>
+                <td>{{ program_subject.subject.subject_name }}</td>
+                <td>{{ program_subject.cutoff }}</td>
+                <td>{{ program_subject.is_compulsory }}</td>
+                <td>{{ program_subject.is_elective }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{%endfor%}
+{% endblock %}

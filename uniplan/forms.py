@@ -1,6 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, TextAreaField
-from wtforms.validators import DataRequired, Optional
+from wtforms import StringField, IntegerField, TextAreaField, BooleanField
+from wtforms.validators import DataRequired, Optional, ValidationError
+
+from uniplan.models import Program, Subject
 
 
 class ProgramForm(FlaskForm):
@@ -28,8 +30,18 @@ class ProgramSubjectForm(FlaskForm):
     program_id = IntegerField('Program ID', validators=[DataRequired()])
     subject_id = IntegerField('Subject ID', validators=[DataRequired()])
     cutoff = IntegerField('Cutoff', validators=[Optional()])
-    is_compulsory = IntegerField('Is Compulsory', validators=[Optional()])
-    is_elective = IntegerField('Is Elective', validators=[Optional()])
+    is_compulsory = BooleanField('Is Compulsory')
+    is_elective = BooleanField('Is Elective')
+
+    def validate_program_id(self, field):
+        program = Program.query.get(field.data)
+        if program is None:
+            raise ValidationError('Invalid Program ID')
+
+    def validate_subject_id(self, field):
+        subject = Subject.query.get(field.data)
+        if subject is None:
+            raise ValidationError('Invalid Subject ID')
 
 
 class ProgramScholarshipForm(FlaskForm):
