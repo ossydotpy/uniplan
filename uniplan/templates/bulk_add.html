@@ -1,0 +1,31 @@
+{%extends 'base.html'%}
+{%block content%}
+<div class="updates">
+    <div id="update_programs" class="update_card">
+        <h2>Bulk Import Programs</h2>
+        <form id="programsImportForm" action="/add_prog_excel" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" accept=".csv" required>
+            <button type="reset" >reset</button>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <div id="update_subjects" class="update_card">
+        <h2>Bulk Import Subjects</h2>
+        <form id="subjectsImportForm" action="" method="post" enctype="multipart/form-data">
+            <input type="file"  name="file" accept=".csv" required>
+            <button type="reset" >reset</button>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <div id="update_scholarships" class="update_card">
+        <h2>Bulk Import Scholarships</h2>
+        <form id="scholarshipsImportForm" action="" method="post" enctype="multipart/form-data">
+            <input type="file"  name="file" accept=".csv" required>
+            <button type="reset">reset</button>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</div>
+{%endblock%}

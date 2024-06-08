@@ -3,8 +3,17 @@
 {%block content%}
 <ul>
     <a href='{{url_for('add_program')}}'><li>add program</li></a>
-    <a href='#'><li>import from excel</li></a>
 </ul>
+
+<div id="popup" class="popup">
+    <span class="close" id="closePopup">&times; close</span>
+    <h2>Import from Excel</h2>
+    <form id="importForm" action="/add_prog_excel" method="post" enctype="multipart/form-data">
+        <input type="file" id="csv_file" name="file" accept=".csv">
+        <button type="reset" id="reset">reset</button>
+        <button type="submit">Submit</button>
+    </form>
+</div>
 
 <div class = 'program-area'>
    <h2>Program Management</h2>
@@ -23,7 +32,7 @@
     <tbody>
         {% for program in programs %}
         <tr>
-            <td>{{ program.program_name }}</td>
+            <td>{{ program.program_name.title() }}</td>
             <td>{{ program.field }}</td>
             <td>{{ program.department }}</td>
             <td>{{ program.university }}</td>
@@ -39,6 +48,8 @@
 </table>
 
 <script>
+
+
 $(document).ready(function() {
     $('.delete-btn').click(function() {
         var programId = $(this).data('program-id');

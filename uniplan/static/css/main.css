@@ -37,3 +37,66 @@ th {
 .navigation ul li a:hover {
     text-decoration: underline;
 }
+
+.popup {
+        width:50%;
+        display: none;
+        position: fixed;
+        top: 30%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #fff;
+        padding: 20px;
+        border: 1px solid #ccc;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+    }
+
+@media screen and (max-width: 768px) {
+        .navigation ul {
+                display: none;
+            }
+        .navigation.active ul {
+                display: block;
+            }
+}
+
+
+th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+}
+th {
+        background-color: #f2f2f2;
+}
+
+@media screen and (max-width: 600px) {
+            table, thead, tbody, th, td, tr {
+                display: block;
+}
+
+
+thead tr {
+                position: absolute;
+                top: -9999px;
+                left: -9999px;
+}
+
+tr { border: 1px solid #dddddd; }
+
+td {
+                border: none;
+                border-bottom: 1px solid #ddd;
+                position: relative;
+                padding-left: 50%;
+}
+
+td:before {
+                position: absolute;
+                top: 6px;
+                left: 6px;
+                width: 45%;
+                padding-right: 10px;
+                white-space: nowrap;
+}

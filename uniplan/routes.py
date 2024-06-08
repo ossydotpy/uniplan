@@ -1,4 +1,7 @@
-from flask import render_template, redirect, url_for
+import csv
+from functools import wraps
+
+from flask import render_template, redirect, url_for, request, flash
 from uniplan import app, db
 from uniplan.models import Program, Subject, ProgramSubject, Scholarship, ProgramScholarship
 from uniplan.forms import ProgramForm, SubjectForm, ProgramSubjectForm, ScholarshipForm, ProgramScholarshipForm
@@ -118,9 +121,55 @@ def delete_program(program_id):
     db.session.commit()
     return redirect(url_for('manage_programs'))
 
-# @app.route('/delete_prog/<int:program_id>', methods=['POST'])
-# def delete_program(program_id):
-#     program = ProgramSubject.query.get_or_404(program_id)
-#     db.session.delete(program)
-#     db.session.commit()
-#     return redirect(url_for('manage_programs'))
+
+@app.route('/bulk_add', methods=['POST', 'GET'])
+def bulk_add():
+    return render_template('bulk_add.html')
+
+
+def extract_csv_content(file):
+    csv_content = []
+    file.seek(0)
+    csv_reader = csv.reader((line.decode('utf-8') for line in file))
+    header = next(csv_reader)
+    for row in csv_reader:
+        csv_content.append(row)
+    return header, csv_content
+
+
+def handle_csv_upload():
+    def decorator(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            file = request.files['file']
+            print('recieved file')
+
+            if not file:
+                flash('No selected file/invalid file type')
+                return redirect(request.url)
+
+            csv_content = extract_csv_content(file)
+            return f(csv_content, *args, **kwargs)
+        return decorated_function
+    return decorator
+
+
+@app.route('/add_prog_excel', methods=['GET', 'POST'])
+@handle_csv_upload()
+def add_prog_excel(csv_content):
+    expected_columns = ['program_id', 'program_name', 'field', 'department', 'university', 'description', 'tuition_fees']
+    header, rows = csv_content
+
+    if header == expected_columns:
+        for program in rows:
+            new_program = Program(program_name=program[1],
+                                  field=program[2],
+                                  department=program[3],
+                                  university=program[4],
+                                  description=program[5],
+                                  tuition_fees=program[6])
+            db.session.add(new_program)
+        db.session.commit()
+    else:
+        flash('column mismatch')
+    return redirect(url_for('manage_programs'))
